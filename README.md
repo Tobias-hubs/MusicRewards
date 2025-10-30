@@ -1,5 +1,10 @@
 # MusicRewards Test App
 
+Note: This project now uses react-native-track-player@nightly because the stable release
+does not compile with Expo SDK/Android at the moment. This is a known community workaround.
+The android/ folder is included so the reviewer can build and run the app directly.
+
+
 This is the recommended project structure for the Belong React Native assessment. Use this as your starting point!
 
 ## 🚀 Setup Instructions
