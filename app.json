@@ -18,7 +18,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wallinex.musicrewards-test-app"
+      "bundleIdentifier": "com.wallinex.musicrewards-test-app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,6 +38,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "975f4763-b10f-42bf-b702-53f0bfe529ea"
+      }
     }
   }
 }

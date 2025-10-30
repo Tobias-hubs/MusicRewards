@@ -14,6 +14,7 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~54.0.12",
+    "expo-av": "~16.0.7",
     "expo-blur": "~15.0.7",
     "expo-linear-gradient": "~15.0.7",
     "expo-router": "3.5.23",
@@ -21,7 +22,7 @@
     "react-native": "0.81.4",
     "react-native-gesture-handler": "~2.28.0",
     "react-native-reanimated": "~4.1.2",
-    "react-native-track-player": "^4.1.2",
+    "react-native-track-player": "^5.0.0-alpha0-nightly-359af5a12d712d3b685530aed9b9625865a25d74",
     "zustand": "^5.0.4"
   },
   "overrides": {
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.7",
+    "@react-native-community/cli": "^20.0.1",
     "@types/react": "~19.1.10",
     "babel-preset-expo": "^54.0.3",
     "typescript": "~5.9.2"
