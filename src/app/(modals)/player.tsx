@@ -5,12 +5,12 @@ import {
   Text, 
   StyleSheet, 
   TouchableOpacity,
-  SafeAreaView,
   Alert
 } from 'react-native';
 import { GlassCard, GlassButton } from '../../components/ui/GlassCard';
 import { useMusicPlayer } from '../../hooks/useMusicPlayer';
 import { THEME } from '../../constants/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PlayerModal() {
   const { 
