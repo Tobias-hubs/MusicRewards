@@ -34,6 +34,7 @@ export default function HomeScreen() {
   );
 
   return (
+   
     <View style={styles.container}>
       <Text style={styles.header}>Music Challenges</Text>
       <Text style={styles.subtitle}>

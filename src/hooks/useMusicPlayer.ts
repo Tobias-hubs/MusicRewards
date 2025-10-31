@@ -31,18 +31,41 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
   const addPoints = useUserStore((state) => state.addPoints);
   const completeChallenge = useUserStore((state) => state.completeChallenge);
 
-  // Track playback state changes
-  useEffect(() => {
-    // Some versions of usePlaybackState may return an object, so extract value if needed
-    let stateValue: any = playbackState;
-    if (typeof playbackState === 'object' && playbackState !== null && 'state' in playbackState) {
-      stateValue = playbackState.state;
+  useTrackPlayerEvents([Event.PlaybackActiveTrackChanged, Event.PlaybackError], async (event) => {
+  if (event.type === Event.PlaybackActiveTrackChanged && event.track) {
+    const trackObject = event.track;
+    if (trackObject) {
+      
+      const challenge = useMusicStore.getState().challenges.find(
+        (c) => c.id === trackObject.id
+      );
+
+      if (challenge) {
+        setCurrentTrack(challenge);
+      } else {
+        // fallback
+        setCurrentTrack({
+          id: trackObject.id,
+          title: trackObject.title ?? '',
+          artist: trackObject.artist ?? '',
+          audioUrl: trackObject.url,
+          duration: trackObject.duration ?? 0,
+          points: 0,
+          description: '',
+          difficulty: 'easy',
+          completed: false,
+          progress: 0,
+        });
+      }
     }
-    const isCurrentlyPlaying = stateValue === State.Playing;
-    if (isCurrentlyPlaying !== isPlaying) {
-      setIsPlaying(isCurrentlyPlaying);
-    }
-  }, [playbackState, isPlaying, setIsPlaying]);
+  }
+
+  if (event.type === Event.PlaybackError) {
+    setError(`Playback error: ${event.message}`);
+    setLoading(false);
+  }
+});
+
 
   // Update position and calculate progress/points
   useEffect(() => {
