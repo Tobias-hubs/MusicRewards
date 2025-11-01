@@ -1,10 +1,15 @@
 // Profile screen - User progress and stats
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { GlassCard } from '../../components/ui/GlassCard';
-import { useMusicStore, selectChallenges } from '../../stores/musicStore';
-import { useUserStore, selectTotalPoints, selectCompletedChallenges } from '../../stores/userStore';
-import { THEME } from '../../constants/theme';
+import React from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { GlassCard } from "../../components/ui/GlassCard";
+import { useMusicStore, selectChallenges } from "../../stores/musicStore";
+import {
+  useUserStore,
+  selectTotalPoints,
+  selectCompletedChallenges,
+} from "../../stores/userStore";
+import { THEME } from "../../constants/theme";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function ProfileScreen() {
   const challenges = useMusicStore(selectChallenges);
@@ -12,14 +17,20 @@ export default function ProfileScreen() {
   const completedChallenges = useUserStore(selectCompletedChallenges);
 
   const totalChallenges = challenges.length;
-  const completionRate = totalChallenges > 0 ? (completedChallenges.length / totalChallenges) * 100 : 0;
+  const completionRate =
+    totalChallenges > 0
+      ? (completedChallenges.length / totalChallenges) * 100
+      : 0;
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Your Progress</Text>
 
       {/* Stats Overview */}
-      <GlassCard style={styles.statsCard}>
+      <GlassCard
+        style={styles.statsCard}
+        gradientColors={["#1e3c72", "#2a5298"]}
+      >
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{totalPoints}</Text>
@@ -37,7 +48,10 @@ export default function ProfileScreen() {
       </GlassCard>
 
       {/* Challenge Progress */}
-      <GlassCard style={styles.progressCard}>
+      <GlassCard
+        style={styles.progressCard}
+        gradientColors={["#42275a", "#734b6d"]}
+      >
         <Text style={styles.sectionTitle}>Challenge Progress</Text>
         {challenges.map((challenge) => {
           const isCompleted = completedChallenges.includes(challenge.id);
@@ -45,19 +59,26 @@ export default function ProfileScreen() {
             <View key={challenge.id} style={styles.challengeItem}>
               <View style={styles.challengeHeader}>
                 <Text style={styles.challengeTitle}>{challenge.title}</Text>
-                <Text style={[
-                  styles.challengeStatus,
-                  { color: isCompleted ? THEME.colors.secondary : THEME.colors.text.secondary }
-                ]}>
-                  {isCompleted ? '✅' : '⏳'}
+                <Text
+                  style={[
+                    styles.challengeStatus,
+                    {
+                      color: isCompleted
+                        ? THEME.colors.secondary
+                        : THEME.colors.text.secondary,
+                    },
+                  ]}
+                >
+                  {isCompleted ? "✅" : "⏳"}
                 </Text>
               </View>
               <View style={styles.progressBar}>
-                <View 
+                <LinearGradient
+                  colors={["#00e0ff", "#00ff85"]}
                   style={[
                     styles.progressFill,
-                    { width: `${challenge.progress}%` }
-                  ]} 
+                    { width: `${challenge.progress}%` },
+                  ]}
                 />
               </View>
               <Text style={styles.progressText}>
@@ -69,23 +90,26 @@ export default function ProfileScreen() {
       </GlassCard>
 
       {/* Achievements */}
-      <GlassCard style={styles.achievementsCard}>
+      <GlassCard
+        style={styles.achievementsCard}
+        gradientColors={["#141e30", "#243b55"]}
+      >
         <Text style={styles.sectionTitle}>Achievements</Text>
-        
+
         {totalPoints >= 100 && (
           <View style={styles.achievement}>
             <Text style={styles.achievementIcon}>🏆</Text>
             <Text style={styles.achievementText}>First 100 Points!</Text>
           </View>
         )}
-        
+
         {completedChallenges.length >= 1 && (
           <View style={styles.achievement}>
             <Text style={styles.achievementIcon}>🎵</Text>
             <Text style={styles.achievementText}>Music Lover</Text>
           </View>
         )}
-        
+
         {completionRate >= 100 && (
           <View style={styles.achievement}>
             <Text style={styles.achievementIcon}>🌟</Text>
@@ -111,24 +135,24 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: THEME.fonts.sizes.xxl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: THEME.colors.text.primary,
     marginVertical: THEME.spacing.lg,
-    textAlign: 'center',
+    textAlign: "center",
   },
   statsCard: {
     marginBottom: THEME.spacing.md,
   },
   statsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   statItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   statValue: {
     fontSize: THEME.fonts.sizes.xl,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: THEME.colors.accent,
     marginBottom: THEME.spacing.xs,
   },
@@ -141,7 +165,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: THEME.fonts.sizes.lg,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: THEME.colors.text.primary,
     marginBottom: THEME.spacing.md,
   },
@@ -149,9 +173,9 @@ const styles = StyleSheet.create({
     marginBottom: THEME.spacing.md,
   },
   challengeHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: THEME.spacing.xs,
   },
   challengeTitle: {
@@ -163,14 +187,13 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 3,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginBottom: THEME.spacing.xs,
   },
   progressFill: {
-    height: '100%',
-    backgroundColor: THEME.colors.accent,
+    height: "100%",
     borderRadius: 3,
   },
   progressText: {
@@ -181,8 +204,8 @@ const styles = StyleSheet.create({
     marginBottom: THEME.spacing.xl,
   },
   achievement: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: THEME.spacing.sm,
   },
   achievementIcon: {
@@ -196,7 +219,7 @@ const styles = StyleSheet.create({
   noAchievements: {
     fontSize: THEME.fonts.sizes.sm,
     color: THEME.colors.text.tertiary,
-    textAlign: 'center',
-    fontStyle: 'italic',
+    textAlign: "center",
+    fontStyle: "italic",
   },
 });

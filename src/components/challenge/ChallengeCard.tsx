@@ -1,9 +1,10 @@
 // ChallengeCard component - Individual challenge display
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { GlassCard, GlassButton } from '../ui/GlassCard';
-import { THEME } from '../../constants/theme';
-import type { MusicChallenge } from '../../types';
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { GlassCard, GlassButton } from "../ui/GlassCard";
+import { THEME } from "../../constants/theme";
+import type { MusicChallenge } from "../../types";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface ChallengeCardProps {
   challenge: MusicChallenge;
@@ -21,53 +22,66 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
   const formatDuration = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return THEME.colors.secondary;
-      case 'medium': return THEME.colors.accent;
-      case 'hard': return THEME.colors.primary;
-      default: return THEME.colors.text.secondary;
+      case "easy":
+        return THEME.colors.secondary;
+      case "medium":
+        return THEME.colors.accent;
+      case "hard":
+        return THEME.colors.primary;
+      default:
+        return THEME.colors.text.secondary;
     }
   };
 
   const getGradientForDifficulty = (difficulty: string) => {
-  switch (difficulty) {
-    case 'easy': return ['#1e3c72', '#2a5298'];
-    case 'medium': return ['#42275a', '#734b6d'];
-    case 'hard': return ['#141e30', '#243b55'];
-    default: return THEME.glass.gradientColors.card; // fallback
-  }
-};
+    switch (difficulty) {
+      case "easy":
+        return ["#1e3c72", "#2a5298"];
+      case "medium":
+        return ["#42275a", "#734b6d"];
+      case "hard":
+        return ["#141e30", "#243b55"];
+      default:
+        return THEME.glass.gradientColors.card; // fallback
+    }
+  };
 
   const getButtonTitle = () => {
-    if (challenge.completed) return 'Completed ✓';
-    if (isCurrentTrack && isPlaying) return 'Playing...';
-    if (isCurrentTrack && !isPlaying) return 'Resume';
-    return 'Play Challenge';
+    if (challenge.completed) return "Completed ✓";
+    if (isCurrentTrack && isPlaying) return "Playing...";
+    if (isCurrentTrack && !isPlaying) return "Resume";
+    return "Play Challenge";
   };
 
   return (
-   <GlassCard
-  style={StyleSheet.flatten([
-    styles.card,
-    isCurrentTrack && styles.currentTrackCard
-  ])}
-  gradientColors={getGradientForDifficulty(challenge.difficulty)}
->
+    <GlassCard
+      style={StyleSheet.flatten([
+        styles.card,
+        isCurrentTrack && styles.currentTrackCard,
+      ])}
+      gradientColors={getGradientForDifficulty(challenge.difficulty)}
+    >
       <View style={styles.header}>
         <View style={styles.titleSection}>
           <Text style={styles.title}>{challenge.title}</Text>
           <Text style={styles.artist}>{challenge.artist}</Text>
         </View>
-        <View style={StyleSheet.flatten([
-          styles.difficultyBadge,
-          { backgroundColor: getDifficultyColor(challenge.difficulty) }
-        ])}>
+        <View
+          style={StyleSheet.flatten([
+            styles.difficultyBadge,
+            { backgroundColor: getDifficultyColor(challenge.difficulty) },
+          ])}
+        >
           <Text style={styles.difficultyText}>
-            {challenge.difficulty.toUpperCase()}
+            {/* {challenge.difficulty.toUpperCase()} */}
+            {challenge.difficulty === 'easy' && '🎧 EASY'}
+  {challenge.difficulty === 'medium' && '⚡ MEDIUM'}
+  {challenge.difficulty === 'hard' && '🔥 HARD'}
           </Text>
         </View>
       </View>
@@ -79,28 +93,30 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>
           <Text style={styles.infoLabel}>Duration</Text>
-          <Text style={styles.infoValue}>{formatDuration(challenge.duration)}</Text>
+          <Text style={styles.infoValue}>
+            {formatDuration(challenge.duration)}
+          </Text>
         </View>
         <View style={styles.infoItem}>
           <Text style={styles.infoLabel}>Points</Text>
-          <Text style={[styles.infoValue, { color: THEME.colors.accent }]}> 
+          <Text style={[styles.infoValue, { color: THEME.colors.accent }]}>
             {challenge.points}
           </Text>
         </View>
         <View style={styles.infoItem}>
           <Text style={styles.infoLabel}>Progress</Text>
-          <Text style={styles.infoValue}>{Math.round(challenge.progress)}%</Text>
+          <Text style={styles.infoValue}>
+            {Math.round(challenge.progress)}%
+          </Text>
         </View>
       </View>
 
       {challenge.progress > 0 && (
         <View style={styles.progressContainer}>
           <View style={styles.progressTrack}>
-            <View
-              style={StyleSheet.flatten([
-                styles.progressFill,
-                { width: `${challenge.progress}%` }
-              ])}
+            <LinearGradient
+              colors={["#00e0ff", "#00ff85"]} // neonblå → grön
+              style={[styles.progressFill, { width: `${challenge.progress}%` }]}
             />
           </View>
         </View>
@@ -109,7 +125,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
       <GlassButton
         title={getButtonTitle()}
         onPress={() => onPlay(challenge)}
-        variant={isCurrentTrack ? 'primary' : 'secondary'}
+        variant={isCurrentTrack ? "primary" : "secondary"}
         disabled={challenge.completed}
         style={styles.playButton}
       />
@@ -126,9 +142,9 @@ const styles = StyleSheet.create({
     borderColor: THEME.colors.primary,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: THEME.spacing.sm,
   },
   titleSection: {
@@ -137,7 +153,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: THEME.fonts.sizes.lg,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: THEME.colors.text.primary,
     marginBottom: THEME.spacing.xs,
   },
@@ -152,8 +168,8 @@ const styles = StyleSheet.create({
   },
   difficultyText: {
     fontSize: THEME.fonts.sizes.xs,
-    fontWeight: 'bold',
-    color: THEME.colors.background,
+    fontWeight: "bold",
+    color: "#111",
   },
   description: {
     fontSize: THEME.fonts.sizes.sm,
@@ -162,12 +178,12 @@ const styles = StyleSheet.create({
     marginBottom: THEME.spacing.md,
   },
   infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: THEME.spacing.md,
   },
   infoItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   infoLabel: {
     fontSize: THEME.fonts.sizes.xs,
@@ -176,7 +192,7 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: THEME.fonts.sizes.sm,
-    fontWeight: '600',
+    fontWeight: "600",
     color: THEME.colors.text.primary,
   },
   progressContainer: {
@@ -184,13 +200,12 @@ const styles = StyleSheet.create({
   },
   progressTrack: {
     height: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 2,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   progressFill: {
-    height: '100%',
-    backgroundColor: THEME.colors.accent,
+    height: "100%",
     borderRadius: 2,
   },
   playButton: {
