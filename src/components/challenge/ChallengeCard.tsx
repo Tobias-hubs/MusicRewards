@@ -33,6 +33,15 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
     }
   };
 
+  const getGradientForDifficulty = (difficulty: string) => {
+  switch (difficulty) {
+    case 'easy': return ['#1e3c72', '#2a5298'];
+    case 'medium': return ['#42275a', '#734b6d'];
+    case 'hard': return ['#141e30', '#243b55'];
+    default: return THEME.glass.gradientColors.card; // fallback
+  }
+};
+
   const getButtonTitle = () => {
     if (challenge.completed) return 'Completed ✓';
     if (isCurrentTrack && isPlaying) return 'Playing...';
@@ -41,17 +50,13 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
   };
 
   return (
-    <GlassCard
-      style={StyleSheet.flatten([
-        styles.card,
-        isCurrentTrack && styles.currentTrackCard
-      ])}
-      gradientColors={
-        isCurrentTrack
-          ? THEME.glass.gradientColors.primary
-          : THEME.glass.gradientColors.card
-      }
-    >
+   <GlassCard
+  style={StyleSheet.flatten([
+    styles.card,
+    isCurrentTrack && styles.currentTrackCard
+  ])}
+  gradientColors={getGradientForDifficulty(challenge.difficulty)}
+>
       <View style={styles.header}>
         <View style={styles.titleSection}>
           <Text style={styles.title}>{challenge.title}</Text>
