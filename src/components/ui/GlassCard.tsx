@@ -60,13 +60,14 @@ export const GlassCard: React.FC<GlassCardProps> = ({
 
 // Glass Button Component
 interface GlassButtonProps {
-  title: string;
+  title?: string;
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
   variant?: 'primary' | 'secondary';
+  children?:React.ReactNode;
 }
 
 export const GlassButton: React.FC<GlassButtonProps> = ({
@@ -77,6 +78,7 @@ export const GlassButton: React.FC<GlassButtonProps> = ({
   style,
   textStyle,
   variant = 'primary',
+  children,
 }) => {
   const gradientColors = variant === 'primary' 
     ? THEME.glass.gradientColors.primary
@@ -95,6 +97,8 @@ export const GlassButton: React.FC<GlassButtonProps> = ({
       >
         {loading ? (
           <ActivityIndicator color={THEME.colors.text.primary} size="small" />
+           ) : children ? (
+          children
         ) : (
           <Text style={[styles.buttonText, textStyle]}>{title}</Text>
         )}
