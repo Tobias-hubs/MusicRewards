@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   ViewStyle, 
   TextStyle,
-  StyleSheet 
+  StyleSheet, StyleProp
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -18,7 +18,7 @@ interface GlassCardProps {
   children: React.ReactNode;
   blurIntensity?: number;
   borderRadius?: number;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   gradientColors?: readonly string[];
 }
 
@@ -64,7 +64,7 @@ interface GlassButtonProps {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   textStyle?: TextStyle;
   variant?: 'primary' | 'secondary';
   children?:React.ReactNode;

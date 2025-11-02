@@ -11,6 +11,7 @@ interface ChallengeCardProps {
   onPlay: (challenge: MusicChallenge) => void;
   isCurrentTrack?: boolean;
   isPlaying?: boolean;
+  replayingChallengeId?: string;
 }
 
 export const ChallengeCard: React.FC<ChallengeCardProps> = ({
@@ -18,6 +19,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
   onPlay,
   isCurrentTrack = false,
   isPlaying = false,
+  replayingChallengeId,
 }) => {
   const formatDuration = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
@@ -51,12 +53,12 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
     }
   };
 
-  const getButtonTitle = () => {
-    if (challenge.completed) return "Completed ✓";
-    if (isCurrentTrack && isPlaying) return "Playing...";
-    if (isCurrentTrack && !isPlaying) return "Resume";
-    return "Play Challenge";
-  };
+const getButtonTitle = () => {
+  if (isCurrentTrack && isPlaying) return "Playing...";
+  if (isCurrentTrack && !isPlaying) return "Resume";
+  if (challenge.completed) return "Completed ✓"; 
+  return "Play Challenge";
+};
 
   return (
     <GlassCard
@@ -66,6 +68,13 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
       ])}
       gradientColors={getGradientForDifficulty(challenge.difficulty)}
     >
+      {isCurrentTrack && (
+        <View style={styles.nowPlayingBanner}>
+          <Text style={styles.nowPlayingText}>
+            {isPlaying ? "🎵 Now Playing" : "⏸ Paused"}
+          </Text>
+        </View>
+      )}
       <View style={styles.header}>
         <View style={styles.titleSection}>
           <Text style={styles.title}>{challenge.title}</Text>
@@ -115,7 +124,7 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
         <View style={styles.progressContainer}>
           <View style={styles.progressTrack}>
             <LinearGradient
-              colors={["#00e0ff", "#00ff85"]} // neonblå → grön
+              colors={["#00e0ff", "#00ff85"]} 
               style={[styles.progressFill, { width: `${challenge.progress}%` }]}
             />
           </View>
@@ -126,8 +135,11 @@ export const ChallengeCard: React.FC<ChallengeCardProps> = ({
         title={getButtonTitle()}
         onPress={() => onPlay(challenge)}
         variant={isCurrentTrack ? "primary" : "secondary"}
-        disabled={challenge.completed}
-        style={styles.playButton}
+        style={
+         challenge.completed && challenge.id !== replayingChallengeId
+          ? [styles.playButton, { opacity: 0.8 }]
+          : styles.playButton
+        }
       />
     </GlassCard>
   );
@@ -140,6 +152,23 @@ const styles = StyleSheet.create({
   currentTrackCard: {
     borderWidth: 2,
     borderColor: THEME.colors.primary,
+    shadowColor: THEME.colors.primary,
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+  },
+   nowPlayingBanner: {
+    position: "absolute",
+    top: -10,
+    left: 10,
+    backgroundColor: "rgba(0,255,100,0.2)",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  nowPlayingText: {
+    color: "#00ff85",
+    fontWeight: "600",
+    fontSize: 12,
   },
   header: {
     flexDirection: "row",
