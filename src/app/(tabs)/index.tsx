@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { router } from 'expo-router';
 import { ChallengeCard } from '../../components/challenge/ChallengeCard';
+import  ChallengeList  from '../../components/challenge/ChallengeList';
 import { useMusicPlayer } from '../../hooks/useMusicPlayer';
 import { useMusicStore, selectChallenges, selectCurrentTrack, selectIsPlaying } from '../../stores/musicStore';
 import { THEME } from '../../constants/theme';
