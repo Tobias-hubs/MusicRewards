@@ -98,6 +98,7 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
       setLoading(true);
       setError(null);
       
+      if (currentTrack?.id !== track.id) {
       // Reset and add new track
       await TrackPlayer.reset();
       await TrackPlayer.add({
@@ -107,6 +108,7 @@ export const useMusicPlayer = (): UseMusicPlayerReturn => {
         artist: track.artist,
         duration: track.duration,
       });
+    }
       
       // Start playback
       await TrackPlayer.play();

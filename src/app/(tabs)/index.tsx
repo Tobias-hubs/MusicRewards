@@ -10,13 +10,20 @@ import type { MusicChallenge } from '../../types';
 
 export default function HomeScreen() {
   const challenges = useMusicStore(selectChallenges);
-  const currentTrack = useMusicStore(selectCurrentTrack);
-  const isPlaying = useMusicStore(selectIsPlaying);
-  const { play } = useMusicPlayer();
+  // const currentTrack = useMusicStore(selectCurrentTrack);
+  // const isPlaying = useMusicStore(selectIsPlaying);
+  const { play, pause, resume, isPlaying, currentTrack } = useMusicPlayer();
+
 
   const handlePlayChallenge = async (challenge: MusicChallenge) => {
     try {
+      if (currentTrack?.id === challenge.id) { 
+        // If same track, toggle between play/pause
+        if (isPlaying) await pause(); 
+          else await resume(); 
+        } else { 
       await play(challenge);
+        }
       // Navigate to player modal after starting playback
       router.push('/(modals)/player');
     } catch (error) {
